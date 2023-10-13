@@ -21,6 +21,8 @@ class ThemeViewModel @Inject constructor(application: Application) : AndroidView
 
   fun resetState() {
     state.value = ThemeState()
+
+    setColorMode(ThemeState.DEFAULT_COLOR_MODE)
   }
 
   private fun getPreferences(): PreferencesUtils {
