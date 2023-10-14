@@ -93,6 +93,18 @@ fun HomeScreen(
     }
   }
 
+  LaunchedEffect(key1 = modalBottomSheetState.isVisible) {
+    if (!modalBottomSheetState.isVisible) {
+      homeViewModel.setIsOpenCreateTaskModal(false)
+
+      homeViewModel.setIsTitleTextFieldLoaded(false)
+      homeViewModel.setTitle("")
+      homeViewModel.setDescription("")
+      homeViewModel.updateTitleError(null)
+      homeViewModel.updateDescriptionError(null)
+    }
+  }
+
   LaunchedEffect(key1 = Unit) {
     homeViewModel.event.collect { event ->
       when (event) {
@@ -106,6 +118,8 @@ fun HomeScreen(
           homeViewModel.setIsTitleTextFieldLoaded(false)
           homeViewModel.setTitle("")
           homeViewModel.setDescription("")
+          homeViewModel.updateTitleError(null)
+          homeViewModel.updateDescriptionError(null)
         }
 
         is HomeEvent.TaskUpdated -> {
@@ -315,6 +329,7 @@ private fun CreateTaskModal(
     Column(
       modifier = Modifier
         .fillMaxWidth()
+        .verticalScroll(rememberScrollState())
         .padding(modalPadding),
       verticalArrangement = Arrangement.spacedBy(modalGap)
     ) {

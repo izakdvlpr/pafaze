@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
     validateTitle(title = title)
   }
 
-  private fun updateTitleError(titleError: String?) {
+  fun updateTitleError(titleError: String?) {
     state.update { it.copy(titleError = titleError) }
   }
 
@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor(
     validateDescription(description = description)
   }
 
-  private fun updateDescriptionError(descriptionError: String?) {
+  fun updateDescriptionError(descriptionError: String?) {
     state.update { it.copy(descriptionError = descriptionError) }
   }
 

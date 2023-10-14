@@ -44,7 +44,6 @@ import com.izakdvlpr.pafaze.viewmodels.ThemeState
 import com.izakdvlpr.pafaze.viewmodels.ThemeViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
   navController: NavHostController,
@@ -242,8 +241,7 @@ private fun ThemeDialog(
       Column(
         modifier = Modifier
           .fillMaxSize()
-          .padding(cardPadding),
-        verticalArrangement = Arrangement.spacedBy(cardGap)
+          .padding(cardPadding)
       ) {
         Text(
           text = "Tema",
@@ -253,13 +251,18 @@ private fun ThemeDialog(
 
         val themes = listOf(ColorMode.NORD, ColorMode.DRACULA, ColorMode.HACKER)
 
-        themes.forEach { theme ->
+        themes.forEachIndexed { index, theme ->
           Row(
-            modifier = Modifier.noRippleClickable {
-              themeViewModel.setColorMode(theme)
+            modifier = Modifier
+              .padding(
+                top = if (index == 0) cardGap else 0.dp,
+                bottom = if (index == themes.lastIndex) 0.dp else cardGap
+              )
+              .noRippleClickable {
+                themeViewModel.setColorMode(theme)
 
-              onCloseThemeDialog()
-            },
+                onCloseThemeDialog()
+              },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy((cardGap - 10.dp) / 2)
           ) {
