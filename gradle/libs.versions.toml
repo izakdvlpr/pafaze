@@ -14,7 +14,7 @@ hilt-navigation-compose = "1.0.0"
 accompanist-system-ui-controller = "0.27.0"
 androidx-material-icons-extended = "1.5.3"
 material3 = "1.1.2"
-room = "2.4.3"
+room = "2.5.2"
 swipe = "1.2.0"
 
 [libraries]
