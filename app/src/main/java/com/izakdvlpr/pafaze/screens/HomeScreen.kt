@@ -361,7 +361,7 @@ private fun CreateTaskModal(
         ),
         keyboardActions = KeyboardActions(
           onNext = {
-            if (homeState.titleError == null) {
+            if (homeState.title.isNotBlank()) {
               descriptionInputFocusRequester.requestFocus()
             }
           }
@@ -392,7 +392,7 @@ private fun CreateTaskModal(
         ),
         keyboardActions = KeyboardActions(
           onDone = {
-            if (homeState.descriptionError == null) {
+            if (homeState.description.isNotBlank()) {
               homeViewModel.createTask()
             }
           }
