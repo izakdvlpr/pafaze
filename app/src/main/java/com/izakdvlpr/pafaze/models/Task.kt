@@ -1,10 +1,13 @@
 package com.izakdvlpr.pafaze.models
 
-import java.util.UUID
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "tasks")
 class Task(
-  val id: UUID,
+  @PrimaryKey(autoGenerate = true)
+  val id: Int = System.currentTimeMillis().hashCode(),
   val title: String,
   val description: String,
-  val done: Boolean,
+  val done: Boolean = false,
 )
