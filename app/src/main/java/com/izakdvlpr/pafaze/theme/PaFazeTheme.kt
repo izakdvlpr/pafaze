@@ -37,7 +37,8 @@ fun PaFazeTheme(
 
   MaterialTheme(
     colorScheme = colorMode.schema,
-    typography = Typographies,
+    typography = typographies,
+    shapes = shapes,
     content = content
   )
 }

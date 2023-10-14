@@ -4,7 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
-val Typographies = Typography(
+val typographies = Typography(
   titleLarge = TextStyle(
     fontFamily = Fonts.RetroGaming,
     fontSize = 22.sp,

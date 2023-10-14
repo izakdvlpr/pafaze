@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
@@ -79,6 +81,7 @@ fun SettingsScreen(
       modifier = Modifier
         .padding(innerPadding)
         .fillMaxSize()
+        .verticalScroll(rememberScrollState())
         .padding(screenPadding),
       verticalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -228,14 +231,13 @@ private fun ThemeDialog(
   val cardPadding = 30.dp
   val cardHeight = 225.dp
   val cardGap = 20.dp
-  val cardBorderRadius = 16.dp
 
   Dialog(onDismissRequest = { onCloseThemeDialog() }) {
     Card(
       modifier = Modifier
         .fillMaxWidth()
         .height(cardHeight),
-      shape = RoundedCornerShape(cardBorderRadius),
+      shape = MaterialTheme.shapes.large,
     ) {
       Column(
         modifier = Modifier
