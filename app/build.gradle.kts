@@ -80,6 +80,13 @@ dependencies {
   kapt(libs.hilt.android.compiler)
   implementation(libs.hilt.navigation.compose)
 
+  implementation(libs.androidx.room.runtime)
+  implementation(libs.androidx.room.ktx)
+  annotationProcessor(libs.androidx.room.compiler)
+  kapt(libs.androidx.room.compiler)
+
+  implementation(libs.swipe)
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.test.ext.junit)
   androidTestImplementation(libs.espresso.core)

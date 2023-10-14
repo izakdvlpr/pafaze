@@ -13,7 +13,9 @@ hilt-android = "2.44"
 hilt-navigation-compose = "1.0.0"
 accompanist-system-ui-controller = "0.27.0"
 androidx-material-icons-extended = "1.5.3"
-material3 = "1.2.0-alpha09"
+material3 = "1.1.2"
+room = "2.4.3"
+swipe = "1.2.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -36,6 +38,10 @@ hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-comp
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 accompanist-system-ui-controller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist-system-ui-controller" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "androidx-material-icons-extended" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+swipe = { group = "me.saket.swipe", name = "swipe", version.ref = "swipe" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
