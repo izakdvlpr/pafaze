@@ -1,11 +1,9 @@
-package com.izakdvlpr.pafaze.utils
+package com.izakdvlpr.pafaze.database.converters
 
-import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import java.util.Date
 
-@ProvidedTypeConverter
-class RoomConvertUtils {
+class DateTypeConverter {
   @TypeConverter
   fun fromTimestamp(value: Long?): Date? {
     return value?.let { Date(it) }

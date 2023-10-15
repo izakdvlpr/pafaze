@@ -19,6 +19,7 @@ class DatabaseModule {
   fun provideTaskRoomDatabase(@ApplicationContext applicationContext: Context): TaskRoomDatabase {
     return Room.databaseBuilder(applicationContext, TaskRoomDatabase::class.java, "tasks")
       .allowMainThreadQueries()
+      .fallbackToDestructiveMigration()
       .build()
   }
 
