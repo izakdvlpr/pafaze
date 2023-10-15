@@ -87,6 +87,8 @@ dependencies {
 
   implementation(libs.swipe)
 
+  implementation(libs.compose.material.dialogs.datetime)
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.test.ext.junit)
   androidTestImplementation(libs.espresso.core)

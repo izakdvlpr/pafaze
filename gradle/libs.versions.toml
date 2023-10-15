@@ -16,6 +16,7 @@ androidx-material-icons-extended = "1.5.3"
 material3 = "1.1.2"
 room = "2.5.2"
 swipe = "1.2.0"
+compose-material-dialogs-datetime = "0.9.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -42,6 +43,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 swipe = { group = "me.saket.swipe", name = "swipe", version.ref = "swipe" }
+compose-material-dialogs-datetime = { group = "io.github.vanpra.compose-material-dialogs", name = "datetime", version.ref = "compose-material-dialogs-datetime" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
