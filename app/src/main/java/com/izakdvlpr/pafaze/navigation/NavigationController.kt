@@ -5,7 +5,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.izakdvlpr.pafaze.screens.*
+import com.izakdvlpr.pafaze.screens.home.HomeScreen
+import com.izakdvlpr.pafaze.screens.settings.SettingsScreen
 import com.izakdvlpr.pafaze.viewmodels.HomeViewModel
 import com.izakdvlpr.pafaze.viewmodels.SettingsViewModel
 import com.izakdvlpr.pafaze.viewmodels.ThemeViewModel

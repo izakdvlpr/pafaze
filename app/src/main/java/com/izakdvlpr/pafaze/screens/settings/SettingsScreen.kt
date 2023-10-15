@@ -1,4 +1,4 @@
-package com.izakdvlpr.pafaze.screens
+package com.izakdvlpr.pafaze.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.izakdvlpr.pafaze.screens.settings.components.SettingsRow
+import com.izakdvlpr.pafaze.screens.settings.components.ThemeDialog
 import com.izakdvlpr.pafaze.utils.noRippleClickable
 import com.izakdvlpr.pafaze.viewmodels.ColorMode
 import com.izakdvlpr.pafaze.viewmodels.DialogTypes
@@ -43,6 +45,7 @@ import com.izakdvlpr.pafaze.viewmodels.SettingsViewModel
 import com.izakdvlpr.pafaze.viewmodels.ThemeState
 import com.izakdvlpr.pafaze.viewmodels.ThemeViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingsScreen(
@@ -67,9 +70,35 @@ fun SettingsScreen(
 
   Scaffold(
     topBar = {
-      TopBar(
-        navController = navController,
-        themeViewModel = themeViewModel
+      CenterAlignedTopAppBar(
+        navigationIcon = {
+          IconButton(onClick = { navController.navigateUp() }) {
+            Icon(
+              imageVector = Icons.Filled.ArrowBack,
+              contentDescription = "Back"
+            )
+          }
+        },
+        title = {
+          Text(
+            text = "Configurações",
+            style = MaterialTheme.typography.bodyLarge
+          )
+        },
+        actions = {
+          IconButton(onClick = { themeViewModel.resetState() }) {
+            Icon(
+              imageVector = Icons.Outlined.RestartAlt,
+              contentDescription = "Reset"
+            )
+          }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+          containerColor = MaterialTheme.colorScheme.primaryContainer,
+          titleContentColor = MaterialTheme.colorScheme.primary,
+          navigationIconContentColor = Color.White,
+          actionIconContentColor = Color.White,
+        ),
       )
     }
   ) { innerPadding ->
@@ -92,14 +121,14 @@ fun SettingsScreen(
           style = MaterialTheme.typography.titleLarge
         )
 
-        OptionRow(
+        SettingsRow(
           title = "Tema",
           value = themeState.colorMode.title,
           icon = Icons.Outlined.WbSunny,
           onClick = { toggleThemeDialog() }
         )
 
-        OptionRow(
+        SettingsRow(
           title = "Idioma",
           value = "Português",
           icon = Icons.Outlined.Translate,
@@ -142,135 +171,6 @@ fun SettingsScreen(
           color = MaterialTheme.colorScheme.outline,
           style = MaterialTheme.typography.bodySmall
         )
-      }
-    }
-  }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TopBar(
-  navController: NavHostController,
-  themeViewModel: ThemeViewModel
-) {
-  CenterAlignedTopAppBar(
-    navigationIcon = {
-      IconButton(onClick = { navController.navigateUp() }) {
-        Icon(
-          imageVector = Icons.Filled.ArrowBack,
-          contentDescription = "Back"
-        )
-      }
-    },
-    title = {
-      Text(
-        text = "Configurações",
-        style = MaterialTheme.typography.bodyLarge
-      )
-    },
-    actions = {
-      IconButton(onClick = { themeViewModel.resetState() }) {
-        Icon(
-          imageVector = Icons.Outlined.RestartAlt,
-          contentDescription = "Reset"
-        )
-      }
-    },
-    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-      containerColor = MaterialTheme.colorScheme.primaryContainer,
-      titleContentColor = MaterialTheme.colorScheme.primary,
-      navigationIconContentColor = Color.White,
-      actionIconContentColor = Color.White,
-    ),
-  )
-}
-
-@Composable
-private fun OptionRow(
-  title: String,
-  value: String,
-  icon: ImageVector,
-  onClick: () -> Unit,
-) {
-  val containerGap = 20.dp
-
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .noRippleClickable { onClick() },
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(containerGap)
-  ) {
-    Icon(
-      imageVector = icon,
-      contentDescription = "Theme"
-    )
-
-    Column {
-      Text(
-        text = title,
-        style = MaterialTheme.typography.bodyLarge
-      )
-
-      Text(
-        text = value,
-        color = MaterialTheme.colorScheme.secondary,
-        style = MaterialTheme.typography.bodySmall
-      )
-    }
-  }
-}
-
-@Composable
-private fun ThemeDialog(
-  themeState: ThemeState,
-  themeViewModel: ThemeViewModel,
-  onCloseThemeDialog: () -> Unit,
-) {
-  val cardPadding = 30.dp
-  val cardHeight = 225.dp
-  val cardGap = 20.dp
-
-  Dialog(onDismissRequest = { onCloseThemeDialog() }) {
-    Card(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(cardHeight),
-      shape = MaterialTheme.shapes.large,
-    ) {
-      Column(
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(cardPadding)
-      ) {
-        Text(
-          text = "Tema",
-          color = MaterialTheme.colorScheme.primary,
-          style = MaterialTheme.typography.titleMedium
-        )
-
-        val themes = listOf(ColorMode.NORD, ColorMode.DRACULA, ColorMode.HACKER)
-
-        themes.forEachIndexed { index, theme ->
-          Row(
-            modifier = Modifier
-              .padding(
-                top = if (index == 0) cardGap else 0.dp,
-                bottom = if (index == themes.lastIndex) 0.dp else cardGap
-              )
-              .noRippleClickable {
-                themeViewModel.setColorMode(theme)
-
-                onCloseThemeDialog()
-              },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy((cardGap - 10.dp) / 2)
-          ) {
-            RadioButton(selected = themeState.colorMode == theme, onClick = null)
-
-            Text(text = theme.title)
-          }
-        }
       }
     }
   }
