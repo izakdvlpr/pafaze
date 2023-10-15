@@ -13,7 +13,7 @@ android {
   defaultConfig {
     applicationId = "com.izakdvlpr.pafaze"
 
-    minSdk = 21
+    minSdk = 26
     targetSdk = 33
 
     versionCode = 1
