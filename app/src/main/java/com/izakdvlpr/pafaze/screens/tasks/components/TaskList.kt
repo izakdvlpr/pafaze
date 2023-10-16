@@ -1,4 +1,4 @@
-package com.izakdvlpr.pafaze.screens.home.components
+package com.izakdvlpr.pafaze.screens.tasks.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.izakdvlpr.pafaze.viewmodels.HomeState
-import com.izakdvlpr.pafaze.viewmodels.HomeViewModel
+import com.izakdvlpr.pafaze.viewmodels.TasksState
+import com.izakdvlpr.pafaze.viewmodels.TasksViewModel
 
 @Composable
 fun TaskList(
-  homeState: HomeState,
-  homeViewModel: HomeViewModel
+  tasksState: TasksState,
+  tasksViewModel: TasksViewModel
 ) {
   val containerGap = 20.dp
 
@@ -20,16 +20,14 @@ fun TaskList(
     modifier = Modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(containerGap / 2)
   ) {
-//    homeState.tasks.sortBy { it.done }
-
-    homeState.tasks
+    tasksState.tasks
       .filter {
-        it.title.lowercase() == homeState.search || it.title.contains(homeState.search)
+        it.title.lowercase() == tasksState.search || it.title.contains(tasksState.search)
       }
       .forEach { task ->
         TaskCard(
           task = task,
-          homeViewModel = homeViewModel
+          tasksViewModel = tasksViewModel
         )
       }
   }

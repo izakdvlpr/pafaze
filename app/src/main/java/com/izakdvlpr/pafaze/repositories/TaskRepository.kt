@@ -2,7 +2,6 @@ package com.izakdvlpr.pafaze.repositories
 
 import com.izakdvlpr.pafaze.database.daos.TaskDao
 import com.izakdvlpr.pafaze.models.Task
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 

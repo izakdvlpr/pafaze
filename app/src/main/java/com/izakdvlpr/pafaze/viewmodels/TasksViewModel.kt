@@ -9,40 +9,31 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class TasksViewModel @Inject constructor(
   private val taskRepository: TaskRepository
 ) : ViewModel() {
-  val state by lazy { MutableStateFlow<HomeState>(HomeState()) }
+  val state by lazy { MutableStateFlow<TasksState>(TasksState()) }
 
-  val event by lazy { MutableSharedFlow<HomeEvent>() }
-
-  private fun setTasks(tasks: MutableList<Task>) {
-    state.update { it.copy(tasks = tasks) }
-  }
+  val event by lazy { MutableSharedFlow<TasksEvent>() }
 
   fun setIsSearchMode(isSearchMode: Boolean) {
     state.update { it.copy(isSearchMode = isSearchMode) }
-  }
-
-  fun setIsSearchTextFieldLoaded(isSearchTextFieldLoaded: Boolean) {
-    state.update { it.copy(isSearchTextFieldLoaded = isSearchTextFieldLoaded) }
   }
 
   fun setSearch(search: String) {
     state.update { it.copy(search = search) }
   }
 
-  fun setIsOpenCreateTaskModal(isOpenCreateTaskModal: Boolean) {
-    state.update { it.copy(isOpenCreateTaskModal = isOpenCreateTaskModal) }
+  private fun setTasks(tasks: MutableList<Task>) {
+    state.update { it.copy(tasks = tasks) }
   }
 
-  fun setIsTitleTextFieldLoaded(isTitleTextFieldLoaded: Boolean) {
-    state.update { it.copy(isTitleTextFieldLoaded = isTitleTextFieldLoaded) }
+  fun setIsOpenCreateTaskModal(isOpenCreateTaskModal: Boolean) {
+    state.update { it.copy(isOpenCreateTaskModal = isOpenCreateTaskModal) }
   }
 
   fun setTitle(title: String) {
@@ -53,6 +44,10 @@ class HomeViewModel @Inject constructor(
 
   fun updateTitleError(titleError: String?) {
     state.update { it.copy(titleError = titleError) }
+  }
+
+  fun setIsTitleTextFieldLoaded(isTitleTextFieldLoaded: Boolean) {
+    state.update { it.copy(isTitleTextFieldLoaded = isTitleTextFieldLoaded) }
   }
 
   private fun validateTitle(title: String): Boolean {
@@ -71,8 +66,6 @@ class HomeViewModel @Inject constructor(
 
   fun setDescription(description: String) {
     state.update { it.copy(description = description) }
-
-    validateDescription(description = description)
   }
 
   fun updateDescriptionError(descriptionError: String?) {
@@ -93,22 +86,6 @@ class HomeViewModel @Inject constructor(
     return false
   }
 
-  fun setStartAt(startAt: Date) {
-    state.update { it.copy(startAt = startAt) }
-  }
-
-  fun updateStartAtError(startAtError: String?) {
-    state.update { it.copy(startAtError = startAtError) }
-  }
-
-  fun setEndAt(endAt: Date) {
-    state.update { it.copy(endAt = endAt) }
-  }
-
-  fun updateEndAtError(endAtError: String?) {
-    state.update { it.copy(endAtError = endAtError) }
-  }
-
   fun getTasks() {
     viewModelScope.launch {
       val tasks = taskRepository.findMany()
@@ -121,15 +98,11 @@ class HomeViewModel @Inject constructor(
     viewModelScope.launch {
       val title = state.value.title
       val description = state.value.description
-      val startAt = state.value.startAt
-      val endAt = state.value.endAt
 
       val titleValidation = validateTitle(title)
-      val descriptionValidation = validateDescription(description)
 
       val validationHasError = listOf(
         titleValidation,
-        descriptionValidation
       ).any { it }
 
       if (validationHasError) {
@@ -139,13 +112,11 @@ class HomeViewModel @Inject constructor(
       taskRepository.create(
         task = Task(
           title = title,
-          description = description,
-          startAt = startAt,
-          endAt = endAt
+          description = description
         )
       )
 
-      event.emit(HomeEvent.TaskCreated)
+      event.emit(TasksEvent.TaskCreated)
     }
   }
 
@@ -153,7 +124,7 @@ class HomeViewModel @Inject constructor(
     viewModelScope.launch {
       taskRepository.update(id = id, done = done)
 
-      event.emit(HomeEvent.TaskUpdated)
+      event.emit(TasksEvent.TaskUpdated)
     }
   }
 
@@ -161,7 +132,7 @@ class HomeViewModel @Inject constructor(
     viewModelScope.launch {
       taskRepository.delete(id = id)
 
-      event.emit(HomeEvent.TaskDelete)
+      event.emit(TasksEvent.TaskDelete)
     }
   }
 
@@ -170,32 +141,24 @@ class HomeViewModel @Inject constructor(
   }
 }
 
-data class HomeState(
-  val tasks: MutableList<Task> = mutableListOf(),
-
+data class TasksState(
   val isSearchMode: Boolean = false,
-  val isSearchTextFieldLoaded: Boolean = false,
   val search: String = "",
 
-  val isOpenCreateTaskModal: Boolean = false,
-  val isTitleTextFieldLoaded: Boolean = false,
-  val title: String = "",
-  val description: String = "",
-  val startAt: Date = DEFAULT_START_AT,
-  val endAt: Date = DEFAULT_END_AT,
-  val titleError: String? = null,
-  val descriptionError: String? = null,
-  val startAtError: String? = null,
-  val endAtError: String? = null,
-) {
-  companion object {
-    val DEFAULT_START_AT = Date()
-    val DEFAULT_END_AT = Date()
-  }
-}
+  val tasks: MutableList<Task> = mutableListOf(),
 
-sealed class HomeEvent {
-  object TaskCreated : HomeEvent()
-  object TaskUpdated : HomeEvent()
-  object TaskDelete : HomeEvent()
+  val isOpenCreateTaskModal: Boolean = false,
+
+  val title: String = "",
+  val titleError: String? = null,
+  val isTitleTextFieldLoaded: Boolean = false,
+
+  val description: String = "",
+  val descriptionError: String? = null,
+)
+
+sealed class TasksEvent {
+  object TaskCreated : TasksEvent()
+  object TaskUpdated : TasksEvent()
+  object TaskDelete : TasksEvent()
 }

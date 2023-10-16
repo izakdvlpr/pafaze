@@ -1,10 +1,10 @@
-package com.izakdvlpr.pafaze.screens.home.components
+package com.izakdvlpr.pafaze.screens.events.components
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.izakdvlpr.pafaze.viewmodels.HomeState
-import com.izakdvlpr.pafaze.viewmodels.HomeViewModel
+import com.izakdvlpr.pafaze.viewmodels.EventsState
+import com.izakdvlpr.pafaze.viewmodels.EventsViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
@@ -16,9 +16,9 @@ import java.time.ZoneId
 import java.util.Date
 
 @Composable
-fun TaskEndDateDialog(
-  homeState: HomeState,
-  homeViewModel: HomeViewModel,
+fun EventEndDateDialog(
+  eventsState: EventsState,
+  eventsViewModel: EventsViewModel,
   endAtDateDialogState: MaterialDialogState,
   endAtTimeDialogState: MaterialDialogState
 ) {
@@ -38,7 +38,7 @@ fun TaskEndDateDialog(
   ) {
     datepicker(
       title = "Selecione a data de finalização",
-      initialDate = homeState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+      initialDate = eventsState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
       colors = DatePickerDefaults.colors(
         headerBackgroundColor = MaterialTheme.colorScheme.primary,
         headerTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -48,18 +48,20 @@ fun TaskEndDateDialog(
         dateInactiveTextColor = MaterialTheme.colorScheme.onBackground,
       ),
       onDateChange = { date ->
-        homeViewModel.setEndAt(
+        eventsViewModel.setEndAt(
           Date.from(
             LocalDateTime
               .of(
                 date,
-                homeState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalTime(),
+                eventsState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalTime(),
               )
               .atZone(ZoneId.systemDefault()).toInstant()
           )
         )
 
-        endAtTimeDialogState.show()
+        if (!eventsState.allDay) {
+          endAtTimeDialogState.show()
+        }
       }
     )
   }
@@ -80,7 +82,7 @@ fun TaskEndDateDialog(
   ) {
     timepicker(
       title = "Selecione a hora de finalização",
-      initialTime = homeState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalTime(),
+      initialTime = eventsState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalTime(),
       is24HourClock = true,
       colors = TimePickerDefaults.colors(
         activeBackgroundColor = MaterialTheme.colorScheme.primary.copy(0.3f),
@@ -93,11 +95,11 @@ fun TaskEndDateDialog(
         borderColor = MaterialTheme.colorScheme.onBackground
       ),
       onTimeChange = { time ->
-        homeViewModel.setEndAt(
+        eventsViewModel.setEndAt(
           Date.from(
             LocalDateTime
               .of(
-                homeState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                eventsState.endAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                 time
               )
               .atZone(ZoneId.systemDefault()).toInstant()

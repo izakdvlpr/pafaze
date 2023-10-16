@@ -1,10 +1,11 @@
-package com.izakdvlpr.pafaze.screens.home.components
+package com.izakdvlpr.pafaze.screens.events.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -23,36 +25,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.izakdvlpr.pafaze.viewmodels.HomeState
-import com.izakdvlpr.pafaze.viewmodels.HomeViewModel
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import com.izakdvlpr.pafaze.viewmodels.EventsState
+import com.izakdvlpr.pafaze.viewmodels.EventsViewModel
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Date
 import java.util.Locale
 
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskModal(
+fun EventModal(
   modalBottomSheetState: SheetState,
-  homeState: HomeState,
-  homeViewModel: HomeViewModel
+  eventsState: EventsState,
+  eventsViewModel: EventsViewModel
 ) {
   val startAtDateDialogState = rememberMaterialDialogState()
   val startAtTimeDialogState = rememberMaterialDialogState()
@@ -74,27 +68,26 @@ fun TaskModal(
     modifier = Modifier.fillMaxSize(),
     sheetState = modalBottomSheetState,
     onDismissRequest = {
-      homeViewModel.setIsOpenCreateTaskModal(!homeState.isOpenCreateTaskModal)
+      eventsViewModel.setIsOpenCreateEventModal(!eventsState.isOpenCreateEventModal)
     },
   ) {
     Column(
       modifier = Modifier
         .fillMaxWidth()
         .verticalScroll(rememberScrollState())
-        .padding(modalPadding),
-      verticalArrangement = Arrangement.spacedBy(modalGap / 2)
+        .padding(modalPadding)
     ) {
       Column(
         modifier = Modifier.padding(bottom = modalGap / 2),
         verticalArrangement = Arrangement.spacedBy(modalGap / 2)
       ) {
         Text(
-          text = "Criar tarefa",
+          text = "Criar evento",
           style = MaterialTheme.typography.titleLarge
         )
 
         Text(
-          text = "Define o que tem \"Pá Faze\" e evite esquecimentos.",
+          text = "Seja notificando quando o evento acontecer.",
           color = MaterialTheme.colorScheme.secondary,
           style = MaterialTheme.typography.bodySmall,
         )
@@ -105,21 +98,21 @@ fun TaskModal(
           .fillMaxWidth()
           .focusRequester(titleInputFocusRequester)
           .onGloballyPositioned {
-            if (!homeState.isTitleTextFieldLoaded) {
+            if (!eventsState.isTitleTextFieldLoaded) {
               titleInputFocusRequester.requestFocus()
 
-              homeViewModel.setIsTitleTextFieldLoaded(true)
+              eventsViewModel.setIsTitleTextFieldLoaded(true)
             }
           },
-        value = homeState.title,
+        value = eventsState.title,
         label = { Text(text = "Título") },
         shape = MaterialTheme.shapes.medium,
-        isError = homeState.titleError != null,
+        isError = eventsState.titleError != null,
         supportingText = {
-          if (homeState.titleError != null) {
+          if (eventsState.titleError != null) {
             Text(
               modifier = Modifier.fillMaxWidth(),
-              text = homeState.titleError,
+              text = eventsState.titleError,
               color = MaterialTheme.colorScheme.error
             )
           }
@@ -130,60 +123,44 @@ fun TaskModal(
         ),
         keyboardActions = KeyboardActions(
           onNext = {
-            if (homeState.title.isNotBlank()) {
+            if (eventsState.title.isNotBlank()) {
               descriptionInputFocusRequester.requestFocus()
             }
           }
         ),
-        onValueChange = { homeViewModel.setTitle(it) },
+        onValueChange = { eventsViewModel.setTitle(it) },
       )
 
-      TextField(
+      Row(
         modifier = Modifier
           .fillMaxWidth()
-          .focusRequester(descriptionInputFocusRequester),
-        value = homeState.description,
-        label = { Text(text = "Descrição") },
-        shape = MaterialTheme.shapes.medium,
-        isError = homeState.descriptionError != null,
-        supportingText = {
-          if (homeState.descriptionError != null) {
-            Text(
-              modifier = Modifier.fillMaxWidth(),
-              text = homeState.descriptionError,
-              color = MaterialTheme.colorScheme.error
-            )
-          }
-        },
-        keyboardOptions = KeyboardOptions(
-          keyboardType = KeyboardType.Text,
-          imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-          onDone = {
-            if (homeState.description.isNotBlank()) {
-              homeViewModel.createTask()
-            }
-          }
-        ),
-        onValueChange = { homeViewModel.setDescription(it) }
-      )
+          .padding(bottom = modalGap / 2),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+      ) {
+        Text(text = "O evento será o dia todo?")
+
+        Checkbox(
+          checked = eventsState.allDay,
+          onCheckedChange = { eventsViewModel.setAllDay(it) }
+        )
+      }
 
       TextField(
         modifier = Modifier.fillMaxWidth(),
         value = SimpleDateFormat(
-          "dd/MM/yyyy HH:mm",
+          if (eventsState.allDay) "dd/MM/yyyy" else "dd/MM/yyyy HH:mm",
           Locale.getDefault()
-        ).format(homeState.startAt),
+        ).format(eventsState.startAt),
         readOnly = true,
         label = { Text(text = "Data de começo") },
         shape = MaterialTheme.shapes.medium,
-        isError = homeState.startAtError != null,
+        isError = eventsState.startAtError != null,
         supportingText = {
-          if (homeState.startAtError != null) {
+          if (eventsState.startAtError != null) {
             Text(
               modifier = Modifier.fillMaxWidth(),
-              text = homeState.startAtError,
+              text = eventsState.startAtError,
               color = MaterialTheme.colorScheme.error
             )
           }
@@ -204,18 +181,18 @@ fun TaskModal(
       TextField(
         modifier = Modifier.fillMaxWidth(),
         value = SimpleDateFormat(
-          "dd/MM/yyyy HH:mm",
+          if (eventsState.allDay) "dd/MM/yyyy" else "dd/MM/yyyy HH:mm",
           Locale.getDefault()
-        ).format(homeState.endAt),
+        ).format(eventsState.endAt),
         readOnly = true,
         label = { Text(text = "Data de finalização") },
         shape = MaterialTheme.shapes.medium,
-        isError = homeState.endAtError != null,
+        isError = eventsState.endAtError != null,
         supportingText = {
-          if (homeState.endAtError != null) {
+          if (eventsState.endAtError != null) {
             Text(
               modifier = Modifier.fillMaxWidth(),
-              text = homeState.endAtError,
+              text = eventsState.endAtError,
               color = MaterialTheme.colorScheme.error
             )
           }
@@ -240,11 +217,11 @@ fun TaskModal(
         onClick = {
           scope
             .launch {
-              homeViewModel.createTask()
+              eventsViewModel.createEvent()
             }
             .invokeOnCompletion {
               if (!modalBottomSheetState.isVisible) {
-                homeViewModel.setIsOpenCreateTaskModal(!homeState.isOpenCreateTaskModal)
+                eventsViewModel.setIsOpenCreateEventModal(!eventsState.isOpenCreateEventModal)
               }
             }
         }
@@ -257,16 +234,16 @@ fun TaskModal(
       }
     }
 
-    TaskStartDateDialog(
-      homeState = homeState,
-      homeViewModel = homeViewModel,
+    EventStartDateDialog(
+      eventsState = eventsState,
+      eventsViewModel = eventsViewModel,
       startAtDateDialogState = startAtDateDialogState,
       startAtTimeDialogState = startAtTimeDialogState
     )
 
-    TaskEndDateDialog(
-      homeState = homeState,
-      homeViewModel = homeViewModel,
+    EventEndDateDialog(
+      eventsState = eventsState,
+      eventsViewModel = eventsViewModel,
       endAtDateDialogState = endAtDateDialogState,
       endAtTimeDialogState = endAtTimeDialogState
     )

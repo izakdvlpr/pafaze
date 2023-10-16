@@ -1,12 +1,12 @@
-package com.izakdvlpr.pafaze.screens.home.components
+package com.izakdvlpr.pafaze.screens.events.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.EditCalendar
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TaskListEmpty() {
+fun EventListEmpty() {
   Column(
     modifier = Modifier.fillMaxSize(),
     horizontalAlignment = Alignment.CenterHorizontally,
@@ -25,20 +25,13 @@ fun TaskListEmpty() {
   ) {
     Icon(
       modifier = Modifier.size(80.dp),
-      imageVector = Icons.Outlined.EditCalendar,
-      contentDescription = "EditNote"
+      imageVector = Icons.Outlined.Event,
+      contentDescription = null
     )
 
     Text(
-      text = "Nenhuma\ntarefa criada",
+      text = "Nenhum\nevento foi criado",
       style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center)
-    )
-
-    Text(
-      modifier = Modifier.padding(top = 10.dp),
-      text = "Clique no botão abaixo para\ncriar sua primeira tarefa!",
-      color = MaterialTheme.colorScheme.primary,
-      style = MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
     )
   }
 }

@@ -7,7 +7,7 @@ import com.izakdvlpr.pafaze.database.converters.DateTypeConverter
 import com.izakdvlpr.pafaze.database.daos.TaskDao
 import com.izakdvlpr.pafaze.models.Task
 
-@Database(entities = [Task::class], version = 2, exportSchema = false)
+@Database(entities = [Task::class], version = 1, exportSchema = false)
 @TypeConverters(DateTypeConverter::class)
 abstract class TaskRoomDatabase : RoomDatabase() {
   abstract fun taskDao(): TaskDao

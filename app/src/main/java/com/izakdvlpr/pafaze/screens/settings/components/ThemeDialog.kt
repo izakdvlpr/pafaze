@@ -43,7 +43,7 @@ fun ThemeDialog(
           style = MaterialTheme.typography.titleMedium
         )
 
-        val themes = listOf(ColorMode.NORD, ColorMode.DRACULA, ColorMode.HACKER)
+        val themes = listOf(ColorMode.NORD)
 
         themes.forEachIndexed { index, theme ->
           ThemeRow(

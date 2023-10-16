@@ -49,9 +49,7 @@ class ThemeViewModel @Inject constructor(application: Application) : AndroidView
 }
 
 enum class ColorMode(val title: String, val value: String, var schema: Material3ColorScheme) {
-  NORD(title = "Nord", value = "nord", schema = ColorScheme.Nord),
-  DRACULA(title = "Dracula", value = "dracula", schema = ColorScheme.Dracula),
-  HACKER(title = "Hacker", value = "hacker", schema = ColorScheme.Hacker);
+  NORD(title = "Nord", value = "nord", schema = ColorScheme.Nord);
 
   companion object {
     fun findByValue(value: String): ColorMode? {
